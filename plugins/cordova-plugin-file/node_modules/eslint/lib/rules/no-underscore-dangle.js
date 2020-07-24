@@ -11,10 +11,13 @@
 
 module.exports = {
     meta: {
+        type: "suggestion",
+
         docs: {
             description: "disallow dangling underscores in identifiers",
             category: "Stylistic Issues",
-            recommended: false
+            recommended: false,
+            url: "https://eslint.org/docs/rules/no-underscore-dangle"
         },
 
         schema: [
@@ -28,15 +31,29 @@ module.exports = {
                         }
                     },
                     allowAfterThis: {
-                        type: "boolean"
+                        type: "boolean",
+                        default: false
                     },
                     allowAfterSuper: {
-                        type: "boolean"
+                        type: "boolean",
+                        default: false
+                    },
+                    allowAfterThisConstructor: {
+                        type: "boolean",
+                        default: false
+                    },
+                    enforceInMethodNames: {
+                        type: "boolean",
+                        default: false
                     }
                 },
                 additionalProperties: false
             }
-        ]
+        ],
+
+        messages: {
+            unexpectedUnderscore: "Unexpected dangling '_' in '{{identifier}}'."
+        }
     },
 
     create(context) {
@@ -45,6 +62,8 @@ module.exports = {
         const ALLOWED_VARIABLES = options.allow ? options.allow : [];
         const allowAfterThis = typeof options.allowAfterThis !== "undefined" ? options.allowAfterThis : false;
         const allowAfterSuper = typeof options.allowAfterSuper !== "undefined" ? options.allowAfterSuper : false;
+        const allowAfterThisConstructor = typeof options.allowAfterThisConstructor !== "undefined" ? options.allowAfterThisConstructor : false;
+        const enforceInMethodNames = typeof options.enforceInMethodNames !== "undefined" ? options.enforceInMethodNames : false;
 
         //-------------------------------------------------------------------------
         // Helpers
@@ -62,7 +81,7 @@ module.exports = {
 
         /**
          * Check if identifier has a underscore at the end
-         * @param {ASTNode} identifier node to evaluate
+         * @param {string} identifier name of the node
          * @returns {boolean} true if its is present
          * @private
          */
@@ -74,7 +93,7 @@ module.exports = {
 
         /**
          * Check if identifier is a special case member expression
-         * @param {ASTNode} identifier node to evaluate
+         * @param {string} identifier name of the node
          * @returns {boolean} true if its is a special case
          * @private
          */
@@ -84,7 +103,7 @@ module.exports = {
 
         /**
          * Check if identifier is a special case variable expression
-         * @param {ASTNode} identifier node to evaluate
+         * @param {string} identifier name of the node
          * @returns {boolean} true if its is a special case
          * @private
          */
@@ -92,6 +111,18 @@ module.exports = {
 
             // Checks for the underscore library usage here
             return identifier === "_";
+        }
+
+        /**
+         * Check if a node is a member reference of this.constructor
+         * @param {ASTNode} node node to evaluate
+         * @returns {boolean} true if it is a reference on this.constructor
+         * @private
+         */
+        function isThisConstructorReference(node) {
+            return node.object.type === "MemberExpression" &&
+                node.object.property.name === "constructor" &&
+                node.object.object.type === "ThisExpression";
         }
 
         /**
@@ -107,7 +138,7 @@ module.exports = {
                 if (typeof identifier !== "undefined" && hasTrailingUnderscore(identifier) && !isAllowed(identifier)) {
                     context.report({
                         node,
-                        message: "Unexpected dangling '_' in '{{identifier}}'.",
+                        messageId: "unexpectedUnderscore",
                         data: {
                             identifier
                         }
@@ -129,7 +160,7 @@ module.exports = {
                 !isSpecialCaseIdentifierInVariableExpression(identifier) && !isAllowed(identifier)) {
                 context.report({
                     node,
-                    message: "Unexpected dangling '_' in '{{identifier}}'.",
+                    messageId: "unexpectedUnderscore",
                     data: {
                         identifier
                     }
@@ -146,15 +177,38 @@ module.exports = {
         function checkForTrailingUnderscoreInMemberExpression(node) {
             const identifier = node.property.name,
                 isMemberOfThis = node.object.type === "ThisExpression",
-                isMemberOfSuper = node.object.type === "Super";
+                isMemberOfSuper = node.object.type === "Super",
+                isMemberOfThisConstructor = isThisConstructorReference(node);
 
             if (typeof identifier !== "undefined" && hasTrailingUnderscore(identifier) &&
                 !(isMemberOfThis && allowAfterThis) &&
                 !(isMemberOfSuper && allowAfterSuper) &&
+                !(isMemberOfThisConstructor && allowAfterThisConstructor) &&
                 !isSpecialCaseIdentifierForMemberExpression(identifier) && !isAllowed(identifier)) {
                 context.report({
                     node,
-                    message: "Unexpected dangling '_' in '{{identifier}}'.",
+                    messageId: "unexpectedUnderscore",
+                    data: {
+                        identifier
+                    }
+                });
+            }
+        }
+
+        /**
+         * Check if method declaration or method property has a underscore at the end
+         * @param {ASTNode} node node to evaluate
+         * @returns {void}
+         * @private
+         */
+        function checkForTrailingUnderscoreInMethod(node) {
+            const identifier = node.key.name;
+            const isMethod = node.type === "MethodDefinition" || node.type === "Property" && node.method;
+
+            if (typeof identifier !== "undefined" && enforceInMethodNames && isMethod && hasTrailingUnderscore(identifier) && !isAllowed(identifier)) {
+                context.report({
+                    node,
+                    messageId: "unexpectedUnderscore",
                     data: {
                         identifier
                     }
@@ -169,7 +223,9 @@ module.exports = {
         return {
             FunctionDeclaration: checkForTrailingUnderscoreInFunctionDeclaration,
             VariableDeclarator: checkForTrailingUnderscoreInVariableExpression,
-            MemberExpression: checkForTrailingUnderscoreInMemberExpression
+            MemberExpression: checkForTrailingUnderscoreInMemberExpression,
+            MethodDefinition: checkForTrailingUnderscoreInMethod,
+            Property: checkForTrailingUnderscoreInMethod
         };
 
     }
