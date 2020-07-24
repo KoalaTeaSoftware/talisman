@@ -1,0 +1,80 @@
+{
+  "_from": "cc.fovea.cordova.purchase@^7.4.1",
+  "_id": "cc.fovea.cordova.purchase@7.4.3",
+  "_inBundle": false,
+  "_integrity": "sha512-BcZCnig/sEbROSfPb/GErl5obKXysvPAoDY1vzC8vTAGfK6NO5S8UYoiKhVoIIHz9FNH0I+wGoDphznWqFtOeA==",
+  "_location": "/cc.fovea.cordova.purchase",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cc.fovea.cordova.purchase@^7.4.1",
+    "name": "cc.fovea.cordova.purchase",
+    "escapedName": "cc.fovea.cordova.purchase",
+    "rawSpec": "^7.4.1",
+    "saveSpec": null,
+    "fetchSpec": "^7.4.1"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cc.fovea.cordova.purchase/-/cc.fovea.cordova.purchase-7.4.3.tgz",
+  "_shasum": "444d9a854ef314dd8a19ada430127638f7595d0d",
+  "_spec": "cc.fovea.cordova.purchase@^7.4.1",
+  "_where": "D:\\App Development\\phonegap\\cordova-purchase-micro-example-master",
+  "author": {
+    "name": "Jean-Christophe Hoelt",
+    "email": "hoelt@fovea.cc"
+  },
+  "bugs": {
+    "url": "https://github.com/j3k0/cordova-plugin-purchase/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cc.fovea.cordova.purchase",
+    "platforms": [
+      "android",
+      "ios",
+      "wp8"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova Purchase plugin for iOS and Android (AppStore and PlayStore)",
+  "devDependencies": {
+    "cordova": "^6.3.1",
+    "coveralls": "^3.0.3",
+    "eslint": "^5.15.0",
+    "istanbul": "^0.4.5",
+    "jshint": "^2.10.1",
+    "mocha": "^6.0.2",
+    "preprocessor": "^1.4.0",
+    "uglify-js": "^3.4.9"
+  },
+  "homepage": "https://github.com/j3k0/cordova-plugin-purchase",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-windows",
+    "cordova",
+    "phonegap",
+    "purchase",
+    "storekit",
+    "ios",
+    "android",
+    "play",
+    "appstore"
+  ],
+  "license": "MIT",
+  "name": "cc.fovea.cordova.purchase",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j3k0/cordova-plugin-purchase.git"
+  },
+  "scripts": {
+    "coverage": "make test-js-coverage",
+    "test": "make test-js"
+  },
+  "types": "./src/js/index.d.ts",
+  "version": "7.4.3"
+}

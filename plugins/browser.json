@@ -1,0 +1,21 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cc.fovea.cordova.purchase": {
+      "PACKAGE_NAME": "cc.fovea.purchase.demo"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "cc.fovea.purchase.demo"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "cc.fovea.purchase.demo"
+    }
+  },
+  "dependent_plugins": {}
+}
