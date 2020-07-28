@@ -26,3 +26,6 @@ For Android, you also need your own keystore and to update the `BILLING_KEY` to 
 
 MIT
 
+---------------
+https://css-tricks.com/the-javascript-behind-touch-friendly-sliders/
+
