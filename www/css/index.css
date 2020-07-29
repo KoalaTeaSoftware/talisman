@@ -27,9 +27,12 @@ img{
     }
 }
 
-#sentinelIndex{
-    background-image: url("../img/sentinel/index.png"); /* relative to this css file */
+.indexStone{
+    display: none;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+}
+#sentinelIndex{
+    background-image: url("../img/sentinel/index.png"); /* relative to this css file */
 }

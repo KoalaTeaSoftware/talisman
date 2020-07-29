@@ -28,7 +28,7 @@ const purchasable = [
  */
 function showIndex(place) {
     // ToDo: either automatically hide all the indexes, or have a specific hider
-    document.getElementById(place).removeAttribute("display");
+    document.getElementById(place).style.display = 'block';
     document.getElementById("talismanHolder").innerHTML = ""; // whtever the index being shown the holder must be MT
 }
 
@@ -100,7 +100,7 @@ function connectButtons(parentID) {
             item.setAttribute("stroke", "transparent");
             item.onclick = function (e) {
                 const frag = '<img src="img/sentinel/' + e.currentTarget.id + '.jpg">';
-                document.getElementById("sentinelIndex").setAttribute("display", "none");
+                document.getElementById("sentinelIndex").style.display = "none";
                 document.getElementById("talismanHolder").innerHTML = frag;
             }
         }
