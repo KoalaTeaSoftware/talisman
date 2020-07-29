@@ -27,7 +27,7 @@ img{
     }
 }
 
-#talismanHolder{
+#sentinelIndex{
     background-image: url("../img/sentinel/index.png"); /* relative to this css file */
     background-repeat: no-repeat;
     background-position: center;

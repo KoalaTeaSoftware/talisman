@@ -184,8 +184,8 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "cc.fovea.cordova.purchase": "7.4.3",
-    "cordova-plugin-whitelist": "1.3.4",
-    "cordova-plugin-file": "6.0.2"
+    "cordova-plugin-file": "6.0.2",
+    "cordova-plugin-whitelist": "1.3.4"
 }
 // BOTTOM OF METADATA
 });
