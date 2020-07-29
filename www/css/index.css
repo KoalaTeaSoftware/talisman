@@ -33,6 +33,6 @@ img{
     background-position: center;
     background-size: contain;
 }
-#sentinelIndex{
+#sentinel{
     background-image: url("../img/sentinel/index.png"); /* relative to this css file */
 }
