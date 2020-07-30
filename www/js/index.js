@@ -28,8 +28,16 @@ const purchasable = [
  * Then draw the UI
  */
 function onDeviceReady() {
-    const consumableList = []
     // ToDo: get info from the store about what is and what is not owned by the current device owner, handle case when store is offline
+    const productList = ["com.earthoracles.celtmistic.premium_talismans"];
+    store.when(productList[0])
+        .updated(refreshUI)
+        .approved(finishPurchase);
+
+    store.register({type: store.NON_CONSUMABLE, id: productList[0]});
+
+    store.refresh();
+
     // store.when('cc.fovea.purchase.consumable1')
     //     .updated(refreshUI)
     //     .approved(finishPurchase);
