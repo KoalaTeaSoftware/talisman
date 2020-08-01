@@ -1,4 +1,9 @@
-let boughtList = [
+// https://github.com/j3k0/cordova-plugin-purchase/blob/master/doc/api.md#product
+
+const sentinelsProductID = "com.earthoracles.celtmistic.premium_sentinels";
+// const talismansProductID = "com.earthoracles.celtmistic.premium_talismans";
+
+const freeSentinelList = [
     "lightning",
     "financial-loss",
     "danger",
@@ -9,10 +14,9 @@ let boughtList = [
     "evil-eye",
     "haunting",
     "mental-tasks",
-    "physical-tasks"
-];
+    "physical-tasks"]
 
-const purchasable = [
+const premiumSentinelList = [
     "envy",
     "grief",
     "worry",
@@ -22,29 +26,106 @@ const purchasable = [
     "being-undesirable"
 ];
 
+// we know that the user will have the free ones. slice give a shallow copy of the values
+let ownedSentinelList = freeSentinelList.slice();
+
+
 /**
- * Talk to the store, or, if the store is offline, use some sort of local information to decide if the
- * user owns the purchasable items
- * Then draw the UI
+ * @param p - store.Product object https://github.com/j3k0/cordova-plugin-purchase/blob/master/doc/api.md#product
+ *          - this will be sent in by the store
  */
+function updateSentinelList(p) {
+    console.log("updating the sentinel list")
+    if (typeof p === 'undefined') {
+        console.log("Product is undefined - not on a Device? - going to pretend that the purchase has been completed")
+        ownedSentinelList = ownedSentinelList.concat(premiumSentinelList);
+    } else if (p.owned) {
+        ownedSentinelList = ownedSentinelList.concat(premiumSentinelList);
+    }
+}
+
+function initiatePurchaseOfSentinels() {
+    if (typeof store === 'undefined') {
+        console.log("Unable to initiate proper purchase - Store is undefined - not on a Device?")
+        updateSentinelList();
+        refreshUI()
+    } else {
+        store.order(sentinelsProductID)
+            .then(console.log("Purchasing Sentinels"))
+            .error((error) => {
+                console.log('store_error', {});
+                alert('An Error Occurred' + JSON.stringify(error));
+            })
+    }
+
+}
+
 function onDeviceReady() {
-    // ToDo: get info from the store about what is and what is not owned by the current device owner, handle case when store is offline
-    const productList = ["com.earthoracles.celtmistic.premium_talismans"];
-    store.when(productList[0])
-        .updated(refreshUI)
-        .approved(finishPurchase);
+    if (typeof store === 'undefined') {
+        console.log("Store is undefined - not on a Device?")
+        refreshUI();
+    } else {
+        // set store up to change things when various actions occur
+        store.verbosity = store.DEBUG;
 
-    store.register({type: store.NON_CONSUMABLE, id: productList[0]});
+        // ToDo: receipt validation https://billing-dashboard.fovea.cc/setup/cordova/
 
-    store.refresh();
+        store.when(sentinelsProductID)
 
-    // store.when('cc.fovea.purchase.consumable1')
-    //     .updated(refreshUI)
-    //     .approved(finishPurchase);
-    // store.register({type: store.CONSUMABLE, id: 'cc.fovea.purchase.consumable1'});
-    // store.refresh();
+            // "Called when an order failed."
+            .error((error) => {
+                console.log('store_error', {});
+                alert('An Error Occurred' + JSON.stringify(error));
+            })
 
-    refreshUI();
+            // "Called when product data is loaded from the store."
+            .loaded(updateSentinelList)
+
+            // "Called when a non-consumable product or subscription is owned.",
+            // .owned() - later will have consumable products, so don't use this action
+
+            // "Called when any change occured to a product."
+            // hope that the owned is triggered before the update
+            .updated(refreshUI)
+
+            //"Called when a product order is approved."
+            .approved(function (product) {
+                console.log("Order for product " + product.id + " has been approved")
+                updateSentinelList(product);
+                /*
+                "Call product.finish() to confirm to the store that an approved order has been delivered."
+                This will change the product state from APPROVED to FINISHED
+                 */
+                product.finish();
+                refreshUI();
+            })
+
+        // The store needs to know the type and identifiers of your products before you can use them in your code
+        store.register({
+            type: store.NON_CONSUMABLE,
+            alias: '',
+            id: sentinelsProductID
+        });
+
+        // Here, the store's server will be contacted to load human readable title and description, price, etc
+        store.refresh();
+
+        // gather some debugging information
+        let premiumSentinelsProduct = store.get(sentinelsProductID);
+
+        if (!premiumSentinelsProduct) {
+            console.log("Store yielded nothing in response to the get for " + sentinelsProductID);
+        } else if (premiumSentinelsProduct.state === store.REGISTERED) {
+            console.log("The product is registered")
+        }
+        // store.when('cc.fovea.purchase.consumable1')
+        //     .updated(refreshUI)
+        //     .approved(finishPurchase);
+        // store.register({type: store.CONSUMABLE, id: 'cc.fovea.purchase.consumable1'});
+        // store.refresh();
+
+        refreshUI();
+    }
 }
 
 /**
@@ -69,7 +150,6 @@ function refreshUI() {
         // within each of these index stones, go through the list of rectangles
         const parentElement = listOfIndexStones[stoneIndex];
         const pathPart = parentElement.getAttribute("id");
-        console.log("Working on index stone " + pathPart);
 
         const theListOfButtons = parentElement.getElementsByTagName("rect");
         const listLen = theListOfButtons.length;
@@ -78,36 +158,25 @@ function refreshUI() {
             const buttonElement = theListOfButtons[buttonIndex];
             buttonElement.setAttribute("fill", "transparent");
             const buttonIDString = buttonElement.getAttribute('id');
-            console.log("Working on button " + buttonIDString);
 
-            if (boughtList.indexOf(buttonIDString) < 0) {
+            if (ownedSentinelList.indexOf(buttonIDString) < 0) {
                 buttonElement.setAttribute("stroke", "grey");
                 buttonElement.onclick = function (e) {
                     alert("Invoke the purchase process for " + e.currentTarget.id);
-                    finishPurchase();
+                    initiatePurchaseOfSentinels();
                     refreshUI();
                 }
             } else {
                 buttonElement.setAttribute("stroke", "transparent");
                 buttonElement.onclick = function (e) {
                     document.getElementById(pathPart).style.display = "none";
-                    const frag = '<img src="img/' + pathPart + '/' + e.currentTarget.id + '.jpg">';
-                    document.getElementById("talismanHolder").innerHTML = frag;
+                    document.getElementById("talismanHolder").innerHTML =
+                        '<img src="img/' + pathPart + '/' + e.currentTarget.id + '.jpg" alt="The Stone">';
                 }
             }
         }
     }
 
-    /**
-     * Called by the shops
-     * @param p - ToDo: understand this
-     */
-    function finishPurchase(p) {
-        // these are the things to do with the IAP
-        // localStorage.goldCoins = (localStorage.goldCoins | 0) + 10;
-        boughtList = boughtList.concat(purchasable);
-        // p.finish();
-    }
 
     // ToDo: handle more than one indexStone, and handle the index of stone types - maybe using local storage?
     const defaultIndexID = "sentinel";
