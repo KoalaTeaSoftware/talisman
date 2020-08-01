@@ -70,6 +70,7 @@ function onDeviceReady() {
 
         // ToDo: receipt validation https://billing-dashboard.fovea.cc/setup/cordova/
 
+        // noinspection SpellCheckingInspection
         store.when(sentinelsProductID)
 
             // "Called when an order failed."
