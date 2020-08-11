@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"
         id="com.earthoracles.celtmistic"
-        version="1.0.2" >
+        version="1.0.3" >
     <name>The Talismans</name>
     <description>
         An attempt to build an app with IAP.
