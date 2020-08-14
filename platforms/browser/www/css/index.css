@@ -5,6 +5,10 @@ body {
     padding: 0;
     background-color: black;
 }
+/* ToDo: make sure that this div is not used in a live application */
+#debugBlock{
+    color: antiquewhite;
+}
 
 /* cause the images to be centered in their holder */
 img{

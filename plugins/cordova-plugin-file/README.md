@@ -53,8 +53,8 @@ This plugin defines global `cordova.file` object.
 
 Although in the global scope, it is not available until after the `deviceready` event.
 
-    document.addEventListener("deviceready", onDeviceReady, false);
-    function onDeviceReady() {
+    document.addEventListener("deviceready", deviceReadyActions, false);
+    function deviceReadyActions() {
         console.log(cordova.file);
     }
 
