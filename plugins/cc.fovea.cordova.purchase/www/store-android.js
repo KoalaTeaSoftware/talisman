@@ -136,7 +136,7 @@
 ///     }
 /// ```
 ///
-/// In this example, `render` redraw the purchase element whatever
+/// In this example, `render` show the purchase element whatever
 /// happens to the product. When the view is hidden, we stop listening to changes
 /// (`store.off(render)`).
 ///

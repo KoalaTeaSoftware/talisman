@@ -22,7 +22,7 @@
      class="indexStone"
      id="sentinel">
     <g id="buttons" class="d-none">
-      <rect height="19" width="392" x="72.2" y="034" id="lightning"/>
+        <rect height="19" width="392" x="72.2" y="034" id="lightning"/>
         <rect height="19" width="392" x="72.2" y="054" id="financial-loss"/>
         <rect height="19" width="392" x="72.2" y="074" id="danger"/>
         <rect height="19" width="392" x="72.2" y="094" id="anger-of-others"/>
@@ -52,6 +52,35 @@
     <div class="stars"></div>
     <div class="stars"></div>
 </div-->
+<script type="text/javascript" src="js/specificStoneDisplayHandler.js"></script>
+<script type="text/javascript" src="js/stoneSetClass.js"></script>
+<script type="text/javascript">
+    const sentinelStones = new StoneSetClass(
+        "sentinel",
+        [
+            "lightning",
+            "financial-loss",
+            "danger",
+            "anger-of-others",
+            "forgetfulness",
+            "jealousy",
+            "losing-a-lover",
+            "evil-eye",
+            "haunting",
+            "mental-tasks",
+            "physical-tasks"],
+        [
+            "envy",
+            "grief",
+            "worry",
+            "unwanted-presence",
+            "revenge",
+            "age",
+            "being-undesirable"
+        ]
+    );
+</script>
+<script type="text/javascript" src="js/backButtonHandler.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript">
     app.initialize();

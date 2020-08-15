@@ -1,112 +1,102 @@
-const noticeBlock = document.getElementById("debugBlock");
+const sentinelsProductID = "com.earthoracles.celtmistic.premium_sentinels";
 
 let app = {
-    ownedSentinelList: [],
-    freeSentinelList: [
-        "lightning",
-        "financial-loss",
-        "danger",
-        "anger-of-others",
-        "forgetfulness",
-        "jealousy",
-        "losing-a-lover",
-        "evil-eye",
-        "haunting",
-        "mental-tasks",
-        "physical-tasks"],
-    premiumSentinelList: [
-        "envy",
-        "grief",
-        "worry",
-        "unwanted-presence",
-        "revenge",
-        "age",
-        "being-undesirable"
-    ],
     initialize: function () {
         this.showDebugMsg("Initializing");
 
-        this.ownedSentinelList = this.freeSentinelList.slice(); // slice() give us a shallow copy
-
         window.addEventListener('load', this.deviceReadyAction, false); // for debugging in browser
-        document.addEventListener('deviceready', this.deviceReadyAction, false);
-
-        // toDo: at this point, the click on the logo should take you to the 'which set of talismans' choice
-        document.getElementById("logo").addEventListener("click", this.showTalismanList, false);
-        // todo: this should be showing the 'which set of talismans', not 'which specific talisman' choice
-        app.showTalismanList("sentinel");
+        document.addEventListener('deviceready', this.deviceReadyAction, false); // for when on a phone
     },
     deviceReadyAction: function () {
         app.showDebugMsg("Received the device ready event");
 
-        app.refreshUI();
         if (typeof store === 'undefined') {
             app.showDebugMsg("Store is undefined")
         } else {
+            // ToDo: receipt validation https://billing-dashboard.fovea.cc/setup/cordova/
             app.showDebugMsg("Store is defined")
-            // toDo: add a load of stuff to do with the store (see the deleteme.js file)
-        }
-    },
-    showTalismanList: function (place) {
-        // If this is responding to a click, then the param could be a MouseEvent object
-        if ((typeof (place) === "undefined") || (typeof (place) === "object")) place = 'sentinel';
-        // ToDo: either automatically hide all the indexes, or have a specific hider
-        document.getElementById(place).style.display = 'block';
-        document.getElementById("talismanHolder").innerHTML = ""; // whatever the index being shown the holder must be MT
-    },
-    refreshUI: function () {
-        // go through all of the listed index stones (list of a class of talisman)
-        const listOfIndexStones = document.getElementsByClassName("indexStone");
-        const numIndexStones = listOfIndexStones.length;
 
-        for (let stoneIndex = 0; stoneIndex < numIndexStones; stoneIndex++) {
-            // within each of these index stones, go through the list of rectangles
-            const parentElement = listOfIndexStones[stoneIndex];
-            const pathPart = parentElement.getAttribute("id");
+            // set store up to change things when various actions occur
+            store.verbosity = store.DEBUG;
 
-            const theListOfButtons = parentElement.getElementsByTagName("rect");
-            const listLen = theListOfButtons.length;
-
-            for (let buttonIndex = 0; buttonIndex < listLen; buttonIndex++) {
-                const buttonElement = theListOfButtons[buttonIndex];
-                buttonElement.setAttribute("fill", "transparent");
-                const buttonIDString = buttonElement.getAttribute('id');
-
-                // todo handle other sets of talismans
-                if (this.ownedSentinelList.indexOf(buttonIDString) < 0) {
-                    buttonElement.setAttribute("stroke", "grey");
-                    buttonElement.onclick = function (e) {
-                        alert("Invoke the purchase process for " + e.currentTarget.id);
-                        app.initiatePurchaseOfSentinels();
-                        app.refreshUI();
-                    }
-                } else {
-                    buttonElement.setAttribute("stroke", "transparent");
-                    buttonElement.onclick = function (e) {
-                        document.getElementById(pathPart).style.display = "none";
-                        document.getElementById("talismanHolder").innerHTML =
-                            '<img src="img/' + pathPart + '/' + e.currentTarget.id + '.jpg" alt="The Stone">';
-                    }
-                }
-            }
-        }
-    },
-    initiatePurchaseOfSentinels: function () {
-        if (typeof store === 'undefined') {
-            app.showDebugMsg("Store is undefined, so pretending purchase is successful");
-            this.ownedSentinelList = this.ownedSentinelList.concat(this.premiumSentinelList);
-            this.refreshUI();
-        } else {
-            app.showDebugMsg("Asking the store to make the purchase");
-            store.order(sentinelsProductID)
-                .then(console.log("Purchasing Sentinels"))
+            // noinspection SpellCheckingInspection
+            store.when(sentinelsProductID)
+                // "Called when an order failed."
                 .error((error) => {
                     app.showDebugMsg('store_error', {});
-                    alert('An Error Occurred while ordering' + JSON.stringify(error));
+                    alert('Store Complained:' + JSON.stringify(error));
                 })
+                // .loaded(updateSentinelList) // "Called when product data is loaded from the store."
+                .owned( // "Called when a non-consumable product or subscription is owned." - so not expected to act for Talismans
+                    function(product){
+                    app.showDebugMsg("Product " + product.id + " is owned already");
+                    StoneSetClass.completePurchase(product.id);
+                })
+                // .updated(refreshUI)        // "Called when any change occured to a product." - hope that the owned is triggered before the update
+                .approved(function (product) { //"Called when a product order is approved."
+                    // product ID eg: "com.earthoracles.celtmistic.premium_sentinels"
+                    app.showDebugMsg("Order for product " + product.id + " has been approved");
+                    StoneSetClass.completePurchase(product.id);
+                    app.refreshUI();
+                    /*
+                    "Call product.finish() to confirm to the store that an approved order has been delivered."
+                    This will change the product state from APPROVED to FINISHED
+                     */
+                    product.finish();
+                });
+
+            // The store needs to know the type and identifiers of your products before you can use them in your code
+            store.register({
+                type: store.NON_CONSUMABLE,
+                alias: '',
+                id: sentinelsProductID
+            });
+
+            // Here, the store's server will be contacted to load human readable title and description, price, etc
+            // when it responds the relevant handler will be triggered
+            store.refresh();
+
+            // gather some debugging information
+            let premiumSentinelsProduct = store.get(sentinelsProductID);
+
+            if (!premiumSentinelsProduct) {
+                app.showDebugMsg("Store yielded nothing in response to the get for " + sentinelsProductID);
+            } else if (premiumSentinelsProduct.state === store.REGISTERED) {
+                app.showDebugMsg("The product is registered")
+            }
+            // store.when('cc.fovea.purchase.consumable1')
+            //     .updated(refreshUI)
+            //     .approved(finishPurchase);
+            // store.register({type: store.CONSUMABLE, id: 'cc.fovea.purchase.consumable1'});
+            // store.refresh();
         }
+        app.refreshUI();
     },
+    refreshUI(){
+        specificStoneDisplayHandler.hide();
+
+        // ToDo: this is just to see it getting started
+        StoneSetClass.refresh("sentinel");
+        StoneSetClass.show("sentinel");
+    },
+    // initiatePurchaseOfSentinels: function () {
+    //     if (typeof store === 'undefined') {
+    //         app.showDebugMsg("Store is undefined, so pretending purchase is successful");
+    //         this.ownedSentinelList = this.ownedSentinelList.concat(this.premiumSentinelList);
+    //         this.refreshUI();
+    //     } else {
+    //         app.showDebugMsg("Asking the store to make the purchase");
+    //         store.order(sentinelsProductID)
+    //             .then(console.log("Purchasing Sentinels"))
+    //             .error((error) => {
+    //                 app.showDebugMsg('store_error', {});
+    //                 alert('An Error Occurred while ordering' + JSON.stringify(error));
+    //             })
+    //     }
+    // },
     showDebugMsg: function (msg) {
+        const noticeBlock = document.getElementById("debugBlock");
+
         console.log(msg);
         if ((typeof noticeBlock === 'undefined') || (noticeBlock === null)) {
             console.log("The notice block is undefined");
@@ -117,3 +107,5 @@ let app = {
         }
     }
 }
+
+
