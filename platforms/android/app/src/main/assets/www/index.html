@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <title>Celtmistic Talismans</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/stars.css">
+</head>
+<body>
+<div id="debugBlock">
+    Hello
+</div>
+<div id="header">
+    <img id="logo" class="ctrImg" src="img/celmisticLogo.gif" alt="CeltMistic Logo">
+</div>
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+     x="0px" y="0px"
+     viewBox="0 0 546 433.2"
+     class="indexStone"
+     id="sentinel">
+    <g id="buttons" class="d-none">
+        <rect height="19" width="392" x="72.2" y="034" id="lightning"/>
+        <rect height="19" width="392" x="72.2" y="054" id="financial-loss"/>
+        <rect height="19" width="392" x="72.2" y="074" id="danger"/>
+        <rect height="19" width="392" x="72.2" y="094" id="anger-of-others"/>
+        <rect height="19" width="392" x="72.2" y="114" id="forgetfulness"/>
+        <rect height="19" width="392" x="72.2" y="134" id="jealousy"/>
+        <rect height="19" width="392" x="72.2" y="154" id="losing-a-lover"/>
+        <rect height="19" width="392" x="72.2" y="174" id="evil-eye"/>
+        <rect height="19" width="392" x="72.2" y="194" id="haunting"/>
+        <rect height="19" width="392" x="72.2" y="214" id="mental-tasks"/>
+        <rect height="19" width="392" x="72.2" y="234" id="physical-tasks"/>
+        <rect height="19" width="392" x="72.2" y="254" id="envy"/>
+        <rect height="19" width="392" x="72.2" y="274" id="grief"/>
+        <rect height="19" width="392" x="72.2" y="294" id="worry"/>
+        <rect height="19" width="392" x="72.2" y="315" id="unwanted-presence"/>
+        <rect height="19" width="392" x="72.2" y="335" id="revenge"/>
+        <rect height="19" width="392" x="72.2" y="356" id="age"/>
+        <rect height="19" width="392" x="72.2" y="377" id="being-undesirable"/>
+    </g>
+</svg>
+<div id="talismanHolder"></div>
+<!--div id="space" >
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="stars"></div>
+</div-->
+<script type="text/javascript" src="js/specificStoneDisplayHandler.js"></script>
+<script type="text/javascript" src="js/stoneSetClass.js"></script>
+<script type="text/javascript">
+    const sentinelStones = new StoneSetClass(
+        "sentinel",
+        [
+            "lightning",
+            "financial-loss",
+            "danger",
+            "anger-of-others",
+            "forgetfulness",
+            "jealousy",
+            "losing-a-lover",
+            "evil-eye",
+            "haunting",
+            "mental-tasks",
+            "physical-tasks"],
+        [
+            "envy",
+            "grief",
+            "worry",
+            "unwanted-presence",
+            "revenge",
+            "age",
+            "being-undesirable"
+        ]
+    );
+</script>
+<script type="text/javascript" src="js/backButtonHandler.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript">
+    app.initialize();
+</script>
+</body>
+</html>

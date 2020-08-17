@@ -1,0 +1,42 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+/* ToDo: make sure that this div is not used in a live application */
+#debugBlock{
+    color: antiquewhite;
+}
+
+/* cause the images to be centered in their holder */
+img{
+    display: block;
+    margin: auto;
+}
+@media screen and (orientation: portrait) {
+    .ctrImg {
+        max-width: -moz-available; /* WebKit-based browsers will ignore this. */
+        max-width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+        max-width: fill-available;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .ctrImg {
+        max-height: -moz-available; /* WebKit-based browsers will ignore this. */
+        max-height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+        max-height: fill-available;
+    }
+}
+
+.indexStone{
+    display: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+#sentinel{
+    background-image: url("../img/sentinel/index.png"); /* relative to this css file */
+}

@@ -1,5 +1,5 @@
 (function() {
-"use strict";
+
 
 /// ## <a name="register"></a>*store.register(product)*
 /// Add (or register) a product into the store.
@@ -17,10 +17,10 @@
 store.register = function(product) {
     if (!product)
         return;
-    if (!product.length)
-        store.register([product]);
-    else
+    if (typeof product.length === 'number')
         registerProducts(product);
+    else
+        store.register([product]);
 };
 
 /// ##### example usage
