@@ -206,10 +206,10 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cc.fovea.cordova.purchase": "10.1.1",
     "cordova-plugin-file": "6.0.2",
     "cordova-plugin-network-information": "2.0.2",
-    "cordova-plugin-whitelist": "1.3.4"
+    "cordova-plugin-whitelist": "1.3.4",
+    "cordova-plugin-purchase": "10.2.0"
 }
 // BOTTOM OF METADATA
 });

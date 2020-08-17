@@ -7,9 +7,6 @@
     "files": {}
   },
   "installed_plugins": {
-    "cc.fovea.cordova.purchase": {
-      "PACKAGE_NAME": "com.earthoracles.celtmistic"
-    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.earthoracles.celtmistic"
     },
@@ -17,6 +14,9 @@
       "PACKAGE_NAME": "com.earthoracles.celtmistic"
     },
     "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.earthoracles.celtmistic"
+    },
+    "cordova-plugin-purchase": {
       "PACKAGE_NAME": "com.earthoracles.celtmistic"
     }
   },

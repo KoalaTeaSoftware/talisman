@@ -10,7 +10,6 @@
     "author": "Apache Cordova Team",
     "license": "Apache-2.0",
     "dependencies": {
-        "cc.fovea.cordova.purchase": "10.1.1",
         "cordova-browser": "^6.0.0",
         "cordova-plugin-file": "6.0.2",
         "cordova-plugin-network-information": "2.0.2",
@@ -21,10 +20,8 @@
         "plugins": {
             "cordova-plugin-whitelist": {},
             "cordova-plugin-file": {},
-            "cc.fovea.cordova.purchase": {
-                "BILLING_KEY": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8osTFBhOF9xqiqAZTe+2subW6FQq5k6lFxNFCRUFEOGgMbQnDMVA5o30fSaVzlOFUvS24OCSktGVB5884QgCK2KqQ3nuSEznbUPJ3Z6wPu1Yk7Ihrr+hY5ZjqLMT8wr0LtO54ZpuzsSnf8R5EAiuDIJTjS/T1gtzfDBvnACYxtjGYxyIWubrzKS5KvzzR4N7BRxPYtYwo0dNfuyH3p12Nxki/gG7NfEFgScaUenxR/nICyQdhu2qBiduL1p1KkCzs0Aajux7JE+wm02vZkbjZsYbqgQJG7tBTs1ATXIPNswUycaIDSQ+Tmo8WpE5wN0OGbqdHFcxjj0SdIcxvlKSJwIDAQAB"
-            },
-            "cordova-plugin-network-information": {}
+            "cordova-plugin-network-information": {},
+            "cordova-plugin-purchase": {}
         },
         "platforms": [
             "browser"
